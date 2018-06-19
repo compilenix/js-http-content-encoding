@@ -1,0 +1,35 @@
+{
+  "name": "http-content-encoding",
+  "version": "1.0.0",
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "https://git.compilenix.org/Compilenix/js-http-content-encoding"
+  },
+  "main": "index.js",
+  "scripts": {
+    "clean": "rm -rf node_modules",
+    "test": "./test.sh"
+  },
+  "keywords": [
+    "http",
+    "content-encoding",
+    "gzip",
+    "deflate",
+    "compression"
+  ],
+  "author": "compilenix@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "fs-extra": "6.0.1"
+  },
+  "devDependencies": {
+    "eslint-config-standard": "11.0.0",
+    "eslint-plugin-import": "2.12.0",
+    "eslint-plugin-node": "6.0.1",
+    "eslint-plugin-promise": "3.8.0",
+    "eslint-plugin-standard": "3.1.0",
+    "standard": "11.0.1",
+    "@types/node": "^10.3.3"
+  }
+}
