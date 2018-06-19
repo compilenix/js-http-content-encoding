@@ -39,9 +39,11 @@ function getSupportedContentEncodingHeaderResponse (splitIntoSeperateheaders = f
  */
 async function tryDecodeBuffer (compressionAlg, buffer) {
   return new Promise((resolve, reject) => {
-    compressionAlg = compressionAlg.toLowerCase().trim()
     const result = { hasBeenDecoded: false, buffer: buffer }
+    if (typeof compressionAlg !== 'string') return resolve(result)
+    compressionAlg = compressionAlg.toLowerCase().trim()
     if (!getSupportedContentEncodings().some(x => x === compressionAlg)) return resolve(result)
+    if (typeof buffer !== 'object' || !buffer.length || buffer.length === 0) return resolve(result)
 
     /** @type {zlib.Gunzip | zlib.Inflate} */
     let decompresor
@@ -88,16 +90,16 @@ async function tryDecodeBuffer (compressionAlg, buffer) {
 async function tryDecodeHttpResponse (res, body) {
   return new Promise(async (resolve, reject) => {
     const result = { hasBeenDecoded: false, body: body }
+    if (!res.headers || !res.headers['content-encoding']) return resolve(result)
     const contentEncodingHeader = res.headers['content-encoding'].trim()
     if (!contentEncodingHeader || contentEncodingHeader.length === 0) return resolve(result)
+    if (typeof body !== 'object' || !body.length || body.length === 0) return resolve(result)
 
     // typical one-round-compression
     if (/^(gzip|deflate)$/i.test(contentEncodingHeader)) {
       let decoded = await tryDecodeBuffer(contentEncodingHeader, body)
       return resolve({ hasBeenDecoded: decoded.hasBeenDecoded, body: decoded.buffer })
     }
-
-    // "deflate , "
 
     // got multiple compressions
     let tmpResult = { hasBeenDecoded: false, buffer: result.body }
